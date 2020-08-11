@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import mx.arturo.triple.R
 import mx.arturo.triple.databinding.MainFragmentBinding
 import mx.arturo.triple.model.localdb.ActiveDatabase
+import mx.arturo.triple.model.localdb.ActiveRoom
 import mx.arturo.triple.ui.adapters.ActiveAdapter
 
 class MainFragment : Fragment() {
@@ -33,14 +34,22 @@ class MainFragment : Fragment() {
 
         //make Adapter
         //val adapter = ActiveAdapter()
-        adapter = ActiveAdapter()
+        //list
+        var activesFromRoom = mutableListOf<ActiveRoom>()
+        adapter = ActiveAdapter(activesFromRoom)
+
         binding.recyclerView.adapter = adapter
 
         mainViewModel.activesFromRoom.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.activesData = it
+                //capture the list
+                for(actives in it){
+                    activesFromRoom.add(actives)
+                }
             }
         })
+
+
         binding.lifecycleOwner = this
         //setMenu
         setHasOptionsMenu(true)
@@ -75,7 +84,6 @@ class MainFragment : Fragment() {
 
         })
     }
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.clear_data -> clearData()

@@ -11,17 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import mx.arturo.triple.R
 import mx.arturo.triple.model.localdb.ActiveRoom
 
-class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterable {
-    //this list is set by the view model
-    var activesData = listOf<ActiveRoom>()
-    //filtered list
-    var activesFilterData = mutableListOf<ActiveRoom>()
+class ActiveAdapter(activeDataConstructor : MutableList<ActiveRoom>) : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterable {
 
-    set(value) {
-        field = value
-        notifyDataSetChanged()
+    var activesList = mutableListOf<ActiveRoom>()
+    var activeListAll = listOf<ActiveRoom>()
+    init{
+        activesList = activeDataConstructor
+
+        activeListAll = ArrayList<ActiveRoom>(activesList)
     }
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActiveAdapter.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.active_item,
@@ -30,11 +28,11 @@ class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterab
     }
 
     override fun getItemCount(): Int {
-        return activesData.size
+        return activesList.size
     }
 
     override fun onBindViewHolder(holder: ActiveAdapter.ViewHolder, position: Int) {
-        val currentActive = activesData[position]
+        val currentActive = activesList[position]
         holder.ItemActive.text = currentActive.activo.toString()
         holder.Itemcadena.text = currentActive.cadena
         holder.ItemDeterminante.text = currentActive.determinanteGSP.toString()
@@ -60,14 +58,12 @@ class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterab
             //run on background thread
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
 
-                activesFilterData.addAll(activesData)
-
                 var filteredList = mutableListOf<ActiveRoom>()
 
                 if(charSequence.toString().isEmpty()){
-                    filteredList.addAll(activesData)
+                    filteredList.addAll(activesList)
                 }else{
-                    for(active in activesData){
+                    for(active in activesList){
                         if(active.cadena.toLowerCase().contains(charSequence.toString().toLowerCase())){
                             filteredList.add(active)
                         }
@@ -80,10 +76,10 @@ class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterab
             }
             //run on Ui thread
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                activesFilterData.clear()
-                Log.i("Results Adapter" , activesFilterData.clear().toString())
-                activesFilterData.addAll(results?.values as Collection<ActiveRoom>)
-                Log.i("Results" , activesFilterData.addAll(results?.values as List<ActiveRoom>).toString())
+                activesList.clear()
+                Log.i("Results Adapter" , activesList.clear().toString())
+                activesList.addAll(results?.values as Collection<ActiveRoom>)
+                Log.i("Results" , activesList.addAll(results?.values as List<ActiveRoom>).toString())
                notifyDataSetChanged()
             }
         }
