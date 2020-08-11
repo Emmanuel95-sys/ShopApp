@@ -15,7 +15,7 @@ import mx.arturo.triple.ui.adapters.ActiveAdapter
 
 class MainFragment : Fragment() {
     lateinit var adapter : ActiveAdapter
-
+    lateinit var mainViewModel : MainViewModel
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -26,7 +26,7 @@ class MainFragment : Fragment() {
         val application = requireNotNull(this.activity).application
         val dataSource = ActiveDatabase.getInstance(application).activeDatabaseDao
         val viewModelFactory = MainViewModelFactory(dataSource, application)
-        val mainViewModel =
+        mainViewModel =
             ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         binding.mainViewModelInLayout = mainViewModel
 
@@ -41,45 +41,20 @@ class MainFragment : Fragment() {
                 adapter.activesData = it
             }
         })
-        //clear functionality
-        binding.clearData.setOnClickListener {
-            mainViewModel.onClear()
-        }
-        //filters
-        binding.cadenaFilter.setOnClickListener {
-            var chain = binding.ETquery.text.toString()
-            if (chain == ""){
-                chain = "SORIANA"
-            }
-            mainViewModel.onChainFilter(chain)
-        }
-
-        binding.fullList.setOnClickListener {
-            mainViewModel.callWebService()
-        }
-
-        binding.sucursalFilter.setOnClickListener {
-            var sucursal = binding.ETquery.text.toString()
-            if(sucursal == ""){
-                sucursal = "AEROPUERTO"
-            }
-            mainViewModel.onSucursalFilter(sucursal)
-        }
-
-        binding.gspFilter.setOnClickListener {
-            var gsp = binding.ETquery.text.toString()
-            if(gsp == ""){
-                gsp = "903849"
-            }
-
-            mainViewModel.ongspFilter(gsp)
-        }
-
         binding.lifecycleOwner = this
         //setMenu
         setHasOptionsMenu(true)
         return binding.root
 
+    }
+
+    fun clearData(){
+        //clear functionality
+        mainViewModel.onClear()
+    }
+
+    fun callWebService(){
+        mainViewModel.callWebService()
     }
 
     //like layouts we inflate menus
@@ -101,5 +76,11 @@ class MainFragment : Fragment() {
         })
     }
 
-
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.clear_data -> clearData()
+            R.id.call_web_service -> callWebService()
+        }
+        return false
+    }
 }
