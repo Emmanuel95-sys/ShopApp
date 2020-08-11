@@ -30,6 +30,7 @@ import mx.arturo.triple.ui.adapters.ActiveAdapter
 import okhttp3.Dispatcher
 
 class MainFragment : Fragment() {
+    lateinit var adapter : ActiveAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,11 +46,10 @@ class MainFragment : Fragment() {
             ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         binding.mainViewModelInLayout = mainViewModel
 
-        //call webservice
-        mainViewModel.callWebService()
 
         //make Adapter
-        val adapter = ActiveAdapter()
+        //val adapter = ActiveAdapter()
+        adapter = ActiveAdapter()
         binding.recyclerView.adapter = adapter
 
         mainViewModel.activesFromRoom.observe(viewLifecycleOwner, Observer {
@@ -92,7 +92,6 @@ class MainFragment : Fragment() {
         }
 
         binding.setLifecycleOwner(this)
-
         //setMenu
         setHasOptionsMenu(true)
         return binding.root
@@ -100,22 +99,23 @@ class MainFragment : Fragment() {
     }
 
     //like layouts we inflate menus
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.overflow_menu, menu)
-        var item =  menu.findItem(R.id.search)
-        var searchView = item.actionView as SearchView
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-               return false
-            }
-
-        })
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater?.inflate(R.menu.overflow_menu, menu)
+//        var item =  menu.findItem(R.id.search)
+//        var searchView = item.actionView as SearchView
+//        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(query: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String?): Boolean {
+//                adapter.getFilter().filter(newText)
+//               return false
+//            }
+//
+//        })
+//    }
 
 
 }

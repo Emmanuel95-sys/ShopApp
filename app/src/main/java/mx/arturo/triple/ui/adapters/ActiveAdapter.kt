@@ -3,13 +3,18 @@ package mx.arturo.triple.ui.adapters
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import mx.arturo.triple.R
 import mx.arturo.triple.model.localdb.ActiveRoom
 
-class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>() {
+class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(){//, Filterable {
+    //this list is set by the view model
     var activesData = listOf<ActiveRoom>()
+    //filtered list
+    //var activesFilterList = mutableListOf<ActiveRoom>()
 
     set(value) {
         field = value
@@ -47,4 +52,33 @@ class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>() {
         var ItemLongitud = itemView.findViewById<TextView>(R.id.tvItemLongitud)
         var ItemASucursal = itemView.findViewById<TextView>(R.id.tvItemSurcursal)
     }
+
+    //implementing filter
+//    override fun getFilter(): Filter {
+//        return object : Filter(){
+//            //run on background thread
+//            override fun performFiltering(constraint: CharSequence?): FilterResults {
+//                var filteredList = mutableListOf<ActiveRoom>()
+//                if(constraint.toString().isEmpty()){
+//                    filteredList.addAll(activesData)
+//                }else{
+//                    for(active in activesData){
+//                        if(active.cadena.toLowerCase().
+//                            contains(constraint.toString().toLowerCase()) )
+//                            filteredList.add(active)
+//                    }
+//                }
+//                var filterResults = FilterResults()
+//                filterResults.values = filteredList
+//                return filterResults
+//            }
+//            //run on Ui thread
+//            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+//               activesFilterList.clear()
+//               activesFilterList.addAll(results?.values as List<ActiveRoom>)
+//               notifyDataSetChanged()
+//            }
+//        }
+//    }
+
 }
