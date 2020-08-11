@@ -1,5 +1,6 @@
 package mx.arturo.triple.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,11 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import mx.arturo.triple.R
 import mx.arturo.triple.model.localdb.ActiveRoom
 
-class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(){//, Filterable {
+class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterable {
     //this list is set by the view model
     var activesData = listOf<ActiveRoom>()
     //filtered list
-    //var activesFilterList = mutableListOf<ActiveRoom>()
+    var activesFilterData = mutableListOf<ActiveRoom>()
 
     set(value) {
         field = value
@@ -54,31 +55,38 @@ class ActiveAdapter : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(){//, Filte
     }
 
     //implementing filter
-//    override fun getFilter(): Filter {
-//        return object : Filter(){
-//            //run on background thread
-//            override fun performFiltering(constraint: CharSequence?): FilterResults {
-//                var filteredList = mutableListOf<ActiveRoom>()
-//                if(constraint.toString().isEmpty()){
-//                    filteredList.addAll(activesData)
-//                }else{
-//                    for(active in activesData){
-//                        if(active.cadena.toLowerCase().
-//                            contains(constraint.toString().toLowerCase()) )
-//                            filteredList.add(active)
-//                    }
-//                }
-//                var filterResults = FilterResults()
-//                filterResults.values = filteredList
-//                return filterResults
-//            }
-//            //run on Ui thread
-//            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-//               activesFilterList.clear()
-//               activesFilterList.addAll(results?.values as List<ActiveRoom>)
-//               notifyDataSetChanged()
-//            }
-//        }
-//    }
+    override fun getFilter(): Filter {
+        return object : Filter(){
+            //run on background thread
+            override fun performFiltering(charSequence: CharSequence?): FilterResults {
+
+                activesFilterData.addAll(activesData)
+
+                var filteredList = mutableListOf<ActiveRoom>()
+
+                if(charSequence.toString().isEmpty()){
+                    filteredList.addAll(activesData)
+                }else{
+                    for(active in activesData){
+                        if(active.cadena.toLowerCase().contains(charSequence.toString().toLowerCase())){
+                            filteredList.add(active)
+                        }
+                    }
+                }
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+
+                return filterResults
+            }
+            //run on Ui thread
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                activesFilterData.clear()
+                Log.i("Results Adapter" , activesFilterData.clear().toString())
+                activesFilterData.addAll(results?.values as Collection<ActiveRoom>)
+                Log.i("Results" , activesFilterData.addAll(results?.values as List<ActiveRoom>).toString())
+               notifyDataSetChanged()
+            }
+        }
+    }
 
 }
