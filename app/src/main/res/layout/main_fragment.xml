@@ -9,34 +9,90 @@
             type="mx.arturo.triple.ui.mainFragment.MainViewModel" />
     </data>
 
-    <ScrollView
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/mainTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World!"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <TextView
-                android:id="@+id/mainTV"
-                android:visibility="gone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Hello World!"
-                android:textColor="@android:color/black"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+            android:layout_height="450dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                />
+        <EditText
+            android:id="@+id/ETquery"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:inputType="textPersonName"
+            android:hint="parametro"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recyclerView" />
 
-        </LinearLayout>
-    </ScrollView>
+        <Button
+            android:id="@+id/gspFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GSP"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cadenaFilter"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ETquery" />
 
+        <Button
+            android:id="@+id/cadenaFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cadena"
+            app:layout_constraintBottom_toBottomOf="@+id/gspFilter"
+            app:layout_constraintEnd_toStartOf="@+id/sucursalFilter"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/gspFilter"
+            app:layout_constraintTop_toTopOf="@+id/gspFilter" />
+
+        <Button
+            android:id="@+id/sucursalFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sucursal"
+            app:layout_constraintBottom_toBottomOf="@+id/cadenaFilter"
+            app:layout_constraintEnd_toStartOf="@+id/clearData"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/cadenaFilter"
+            app:layout_constraintTop_toTopOf="@+id/cadenaFilter"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/clearData"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear"
+            app:layout_constraintBottom_toBottomOf="@+id/sucursalFilter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/sucursalFilter"
+            app:layout_constraintTop_toTopOf="@+id/sucursalFilter" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

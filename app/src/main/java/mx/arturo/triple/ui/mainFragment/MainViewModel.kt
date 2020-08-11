@@ -1,9 +1,7 @@
 package mx.arturo.triple.ui.mainFragment
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import mx.arturo.triple.model.localdb.ActiveDatabaseDao
 import mx.arturo.triple.model.localdb.ActiveRoom
@@ -49,29 +47,52 @@ class MainViewModel (val database : ActiveDatabaseDao,
                 insert(activeRoom)
             }
         }
-
     }
 
     private suspend fun insert(newActive : ActiveRoom){
         withContext(Dispatchers.IO){
             database.insert(newActive)
-            var newActive = database.getAllActives()
-            Log.i("clearROOM", newActive.value.toString())
+//            var newActive = database.getAllActives()
+//            Log.i("clearROOM", newActive.value.toString())
         }
     }
 
     //filters
-
-    fun filterSoriana(){
+    fun onClear(){
         uiScope.launch {
-            filterSOri()
+            clear()
         }
     }
 
-    private suspend fun filterSOri() {
+    private suspend fun clear(){
         withContext(Dispatchers.IO){
-            database.filterSoriana()
+            database.clear()
         }
     }
 
+    //var filteredList = database.getAllActives()
+
+    fun onChainFilter(chain : String){
+        uiScope.launch {
+            onClear()
+            filterChainDB(chain)
+        }
+    }
+
+    private suspend fun filterChainDB(chain: String ) {
+        withContext(Dispatchers.IO){
+
+            val response = webService.getActives().await()
+            val allActives = response.getConjuntotiendasUsuarioResult
+            var filteredList = mutableListOf<ActivesModel>()
+
+            for (active in allActives){
+                if(active.cadena == chain){
+                    filteredList.add(active)
+                }
+            }
+            addActives(filteredList)
+        }
+
+    }
 }

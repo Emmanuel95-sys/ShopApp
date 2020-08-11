@@ -43,24 +43,43 @@ class MainFragment : Fragment() {
         //make Adapter
         val adapter = ActiveAdapter()
         binding.recyclerView.adapter = adapter
+
         mainViewModel.activesFromRoom.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapter.activesData = it
             }
         })
+        //clear functionality
+        binding.clearData.setOnClickListener {
+            mainViewModel.onClear()
+        }
+        //filters
+        binding.cadenaFilter.setOnClickListener {
+            var chain = binding.ETquery.text.toString()
+            if (chain == ""){
+                chain = "SORIANA"
+            }
+            mainViewModel.onChainFilter(chain)
+        }
+
+//        mainViewModel.filteredList.observe(viewLifecycleOwner, Observer {
+//            it?.let {
+//                adapter.activesData = it
+//            }
+//        })
 
         binding.setLifecycleOwner(this)
         return binding.root
 
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater?.inflate(R.menu.overflow_menu, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
-
-    }
+//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        super.onCreateOptionsMenu(menu, inflater)
+//        inflater?.inflate(R.menu.overflow_menu, menu)
+//    }
+//
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        return super.onOptionsItemSelected(item)
+//
+//    }
 }

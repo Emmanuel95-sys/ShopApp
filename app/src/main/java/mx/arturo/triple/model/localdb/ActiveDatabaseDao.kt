@@ -1,6 +1,7 @@
 package mx.arturo.triple.model.localdb
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -17,10 +18,7 @@ interface ActiveDatabaseDao {
     @Query("DELETE FROM active_table")
     fun clear()
 
-    @Query("SELECT * FROM active_table WHERE cadena = 'SORIANA'")
-    fun filterSoriana() : LiveData<List<ActiveRoom>>
-
-//filters
+    //filters
     @Query("SELECT * FROM active_table WHERE cadena = :cadena")
     fun filterCadena(cadena: String) : LiveData<List<ActiveRoom>>
 
