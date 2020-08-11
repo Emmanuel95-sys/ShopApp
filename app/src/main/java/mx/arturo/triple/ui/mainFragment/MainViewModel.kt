@@ -93,6 +93,52 @@ class MainViewModel (val database : ActiveDatabaseDao,
             }
             addActives(filteredList)
         }
-
     }
+
+    fun onSucursalFilter(sucursal: String){
+        uiScope.launch {
+            onClear()
+            filterSucursal(sucursal)
+        }
+    }
+
+    private suspend fun filterSucursal(sucursal: String) {
+        withContext(Dispatchers.IO) {
+            val response = webService.getActives().await()
+            val allActives = response.getConjuntotiendasUsuarioResult
+            var filteredList = mutableListOf<ActivesModel>()
+
+            for (active in allActives) {
+                if (active.sucursal == sucursal) {
+                    filteredList.add(active)
+                }
+            }
+            addActives(filteredList)
+        }
+    }
+
+    fun ongspFilter(gsp: String){
+        uiScope.launch {
+            onClear()
+            filtergsp(gsp.toInt())
+        }
+    }
+
+    private suspend fun filtergsp(gsp: Int) {
+        withContext(Dispatchers.IO) {
+            val response = webService.getActives().await()
+            val allActives = response.getConjuntotiendasUsuarioResult
+            var filteredList = mutableListOf<ActivesModel>()
+
+            for (active in allActives) {
+                if (active.determinanteGSP == gsp) {
+                    filteredList.add(active)
+                }
+            }
+            addActives(filteredList)
+        }
+    }
+
+
 }
+

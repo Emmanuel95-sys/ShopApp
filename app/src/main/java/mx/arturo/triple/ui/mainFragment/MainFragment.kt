@@ -62,6 +62,27 @@ class MainFragment : Fragment() {
             mainViewModel.onChainFilter(chain)
         }
 
+        binding.fullList.setOnClickListener {
+            mainViewModel.callWebService()
+        }
+
+        binding.sucursalFilter.setOnClickListener {
+            var sucursal = binding.ETquery.text.toString()
+            if(sucursal == ""){
+                sucursal = "AEROPUERTO"
+            }
+            mainViewModel.onSucursalFilter(sucursal)
+        }
+
+        binding.gspFilter.setOnClickListener {
+            var gsp = binding.ETquery.text.toString()
+            if(gsp == ""){
+                gsp = "903849"
+            }
+
+            mainViewModel.ongspFilter(gsp)
+        }
+
 //        mainViewModel.filteredList.observe(viewLifecycleOwner, Observer {
 //            it?.let {
 //                adapter.activesData = it
@@ -73,9 +94,11 @@ class MainFragment : Fragment() {
 
     }
 
+    //overflow menu to implement
 //    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+//        inflater.inflate(R.menu.overflow_menu, menu)
 //        super.onCreateOptionsMenu(menu, inflater)
-//        inflater?.inflate(R.menu.overflow_menu, menu)
+//
 //    }
 //
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
