@@ -1,12 +1,20 @@
 package mx.arturo.triple.ui.mainFragment
 
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.coroutines.Dispatchers
@@ -83,26 +91,31 @@ class MainFragment : Fragment() {
             mainViewModel.ongspFilter(gsp)
         }
 
-//        mainViewModel.filteredList.observe(viewLifecycleOwner, Observer {
-//            it?.let {
-//                adapter.activesData = it
-//            }
-//        })
-
         binding.setLifecycleOwner(this)
+
+        //setMenu
+        setHasOptionsMenu(true)
         return binding.root
 
     }
 
-    //overflow menu to implement
-//    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-//        inflater.inflate(R.menu.overflow_menu, menu)
-//        super.onCreateOptionsMenu(menu, inflater)
-//
-//    }
-//
-//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        return super.onOptionsItemSelected(item)
-//
-//    }
+    //like layouts we inflate menus
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.overflow_menu, menu)
+        var item =  menu.findItem(R.id.search)
+        var searchView = item.actionView as SearchView
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+               return false
+            }
+
+        })
+    }
+
+
 }
