@@ -3,6 +3,7 @@ package mx.arturo.triple.ui.mainFragment
 
 import android.os.Bundle
 import android.view.*
+
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.databinding.DataBindingUtil
@@ -30,22 +31,15 @@ class MainFragment : Fragment() {
         mainViewModel =
             ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
         binding.mainViewModelInLayout = mainViewModel
-
-
         //make Adapter
         //val adapter = ActiveAdapter()
         //list
-        var activesFromRoom = mutableListOf<ActiveRoom>()
-        adapter = ActiveAdapter(activesFromRoom)
-
-        binding.recyclerView.adapter = adapter
-
         mainViewModel.activesFromRoom.observe(viewLifecycleOwner, Observer {
             it?.let {
                 //capture the list
-                for(actives in it){
-                    activesFromRoom.add(actives)
-                }
+                adapter = ActiveAdapter()
+                adapter.activeListAll = it
+                binding.recyclerView.adapter = adapter
             }
         })
 
@@ -68,12 +62,14 @@ class MainFragment : Fragment() {
 
     //like layouts we inflate menus
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.overflow_menu, menu)
+
         var item =  menu.findItem(R.id.search)
         var searchView = item.actionView as SearchView
+
         searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
+                adapter.getFilter().filter(query)
                 return false
             }
 
@@ -89,6 +85,6 @@ class MainFragment : Fragment() {
             R.id.clear_data -> clearData()
             R.id.call_web_service -> callWebService()
         }
-        return false
+        return true
     }
 }

@@ -11,14 +11,19 @@ import androidx.recyclerview.widget.RecyclerView
 import mx.arturo.triple.R
 import mx.arturo.triple.model.localdb.ActiveRoom
 
-class ActiveAdapter(activeDataConstructor : MutableList<ActiveRoom>) : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterable {
+class ActiveAdapter() : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterable {
 
     var activesList = mutableListOf<ActiveRoom>()
-    var activeListAll = listOf<ActiveRoom>()
-    init{
-        activesList = activeDataConstructor
 
-        activeListAll = ArrayList<ActiveRoom>(activesList)
+    var activeListAll = listOf<ActiveRoom>()
+
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    init{
+
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActiveAdapter.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -31,7 +36,7 @@ class ActiveAdapter(activeDataConstructor : MutableList<ActiveRoom>) : RecyclerV
         return activesList.size
     }
 
-    override fun onBindViewHolder(holder: ActiveAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentActive = activesList[position]
         holder.ItemActive.text = currentActive.activo.toString()
         holder.Itemcadena.text = currentActive.cadena
@@ -57,14 +62,16 @@ class ActiveAdapter(activeDataConstructor : MutableList<ActiveRoom>) : RecyclerV
         return object : Filter(){
             //run on background thread
             override fun performFiltering(charSequence: CharSequence?): FilterResults {
-
+                activesList.addAll(activeListAll)
                 var filteredList = mutableListOf<ActiveRoom>()
 
                 if(charSequence.toString().isEmpty()){
-                    filteredList.addAll(activesList)
+                    filteredList.addAll(activeListAll)
                 }else{
-                    for(active in activesList){
-                        if(active.cadena.toLowerCase().contains(charSequence.toString().toLowerCase())){
+                    for(active in activeListAll){
+                        if(active.cadena.toLowerCase().contains(charSequence.toString().toLowerCase())
+                            || active.determinanteGSP.toString().contains(charSequence.toString())
+                            ||active.sucursal.toLowerCase().contains(charSequence.toString().toLowerCase())){
                             filteredList.add(active)
                         }
                     }
@@ -80,7 +87,7 @@ class ActiveAdapter(activeDataConstructor : MutableList<ActiveRoom>) : RecyclerV
                 Log.i("Results Adapter" , activesList.clear().toString())
                 activesList.addAll(results?.values as Collection<ActiveRoom>)
                 Log.i("Results" , activesList.addAll(results?.values as List<ActiveRoom>).toString())
-               notifyDataSetChanged()
+                notifyDataSetChanged()
             }
         }
     }
