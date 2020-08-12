@@ -8,9 +8,9 @@
     app:showAsAction="always|collapseActionView"
     app:actionViewClass="androidx.appcompat.widget.SearchView"
     />
-<item
-    android:id="@+id/clear_data"
-    android:title="Clear"/>
+<!--<item-->
+<!--    android:id="@+id/clear_data"-->
+<!--    android:title="Clear"/>-->
 <item
     android:id="@+id/call_web_service"
     android:title="Obtener Lista"/>
