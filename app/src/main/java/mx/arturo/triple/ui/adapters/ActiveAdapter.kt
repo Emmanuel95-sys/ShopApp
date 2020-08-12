@@ -14,7 +14,6 @@ import mx.arturo.triple.model.localdb.ActiveRoom
 class ActiveAdapter() : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filterable {
 
     var activesList = mutableListOf<ActiveRoom>()
-
     var activeListAll = listOf<ActiveRoom>()
 
         set(value) {
@@ -22,10 +21,7 @@ class ActiveAdapter() : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filter
             notifyDataSetChanged()
         }
 
-    init{
-
-    }
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ActiveAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         val view = layoutInflater.inflate(R.layout.active_item,
         parent, false)
@@ -38,6 +34,9 @@ class ActiveAdapter() : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filter
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentActive = activesList[position]
+        //avoiding duplicated items
+        holder.setIsRecyclable(false)
+
         holder.ItemActive.text = currentActive.activo.toString()
         holder.Itemcadena.text = currentActive.cadena
         holder.ItemDeterminante.text = currentActive.determinanteGSP.toString()
@@ -84,9 +83,7 @@ class ActiveAdapter() : RecyclerView.Adapter<ActiveAdapter.ViewHolder>(), Filter
             //run on Ui thread
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
                 activesList.clear()
-                Log.i("Results Adapter" , activesList.clear().toString())
                 activesList.addAll(results?.values as Collection<ActiveRoom>)
-                Log.i("Results" , activesList.addAll(results?.values as List<ActiveRoom>).toString())
                 notifyDataSetChanged()
             }
         }

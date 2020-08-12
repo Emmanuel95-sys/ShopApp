@@ -39,11 +39,11 @@ class MainFragment : Fragment() {
                 //capture the list
                 adapter = ActiveAdapter()
                 adapter.activeListAll = it
+
                 binding.recyclerView.adapter = adapter
             }
         })
-
-
+        //
         binding.lifecycleOwner = this
         //setMenu
         setHasOptionsMenu(true)
