@@ -42,7 +42,7 @@ class MainFragment : Fragment() {
 
                 binding.recyclerView.adapter = adapter
             }
-        })
+        })  
         //
         binding.lifecycleOwner = this
         //setMenu
@@ -82,7 +82,7 @@ class MainFragment : Fragment() {
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
-//            R.id.clear_data -> clearData()
+            R.id.clear_data -> clearData()
             R.id.call_web_service -> callWebService()
         }
         return true

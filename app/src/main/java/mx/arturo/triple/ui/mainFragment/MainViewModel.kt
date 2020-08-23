@@ -52,12 +52,9 @@ class MainViewModel (val database : ActiveDatabaseDao,
     private suspend fun insert(newActive : ActiveRoom){
         withContext(Dispatchers.IO){
             database.insert(newActive)
-//            var newActive = database.getAllActives()
-//            Log.i("clearROOM", newActive.value.toString())
         }
     }
 
-    //filters
     fun onClear(){
         uiScope.launch {
             clear()
